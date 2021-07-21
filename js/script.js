@@ -12,6 +12,7 @@ class  Calculator{
     }
 
     delete(){
+        this.currentOperand = this.currentOperand.toString().slice(0,-1)
 
     }
     appendNumber(number){
@@ -81,11 +82,22 @@ numberButtons.forEach(button => {
 operationButtons.forEach(button=>{
     // console.log(button)
     button.addEventListener("click",() =>{
-        calculator.chooseOperation(button.innerText)
-        calculator.updateDisplay()
-    })
+        calculator.chooseOperation(button.innerText);
+        calculator.updateDisplay();
+    });
 })
+
 equalBtn.addEventListener("click",button =>{
-    calculator.compute()
-    calculator.updateDisplay()
+    calculator.compute();
+    calculator.updateDisplay();
+});
+
+allClearButton.addEventListener("click",button=>{
+    calculator.clear();
+    calculator.updateDisplay();
+});
+
+deleteBtn.addEventListener("click",button =>{
+    calculator.delete();
+    calculator.updateDisplay();
 })
