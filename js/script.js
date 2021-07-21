@@ -15,22 +15,54 @@ class  Calculator{
 
     }
     appendNumber(number){
-        this.currentOperand = number;
+        if(number === "." && this.currentOperand.includes(".")) return
+        this.currentOperand =this.currentOperand.toString() + number.toString();
     }
     chooseOperation(operation){
-
+        if(this.currentOperand === "") return 
+        if(this.previousOperand !== ""){
+            this.compute()
+        }
+        this.operation = operation;
+        this.previousOperand = this.currentOperand;
+        this.currentOperand = "";
     }
 
     compute(){
+        let computation;
+        const prev = parseFloat(this.previousOperand);
+        const current = parseFloat(this.currentOperand);
+        if(isNaN(prev)|| isNaN(current))return
+        switch(this.operation){
+            case "+":
+                computation = prev + current;
+                break
+            case "-":
+                computation = prev - current;
+                break
+            case "*":
+                computation = prev * current;
+                break
+            case "÷":
+                computation = prev / current;
+                break
+            default:
+                return
+        }
+        this.currentOperand = computation;
+        this.operation = undefined;
+        this.previousOperand = "";
 
     }
     updateDisplay(){
-        this.currentOperandTextElement.innerText = this.currentOperand;  }
+        this.currentOperandTextElement.innerText = this.currentOperand;  
+        this.previousOperandTextElement.innerText = this.previousOperand
+    }
 }
 
 
 const numberButtons = document.querySelectorAll("[data-number]");
-const operationButtons = document.querySelectorAll("[data-operations]");
+const operationButtons = document.querySelectorAll("[data-operation]");
 const equalBtn =  document.querySelector("[data-equals]");
 const deleteBtn = document.querySelector("[data-delete]");
 const allClearButton = document.querySelector("[data-all-clear]");
@@ -44,4 +76,16 @@ numberButtons.forEach(button => {
         calculator.appendNumber(button.innerText)
         calculator.updateDisplay()
     })
+})
+// console.log(operationButtons)
+operationButtons.forEach(button=>{
+    // console.log(button)
+    button.addEventListener("click",() =>{
+        calculator.chooseOperation(button.innerText)
+        calculator.updateDisplay()
+    })
+})
+equalBtn.addEventListener("click",button =>{
+    calculator.compute()
+    calculator.updateDisplay()
 })
